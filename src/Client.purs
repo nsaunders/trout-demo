@@ -3,9 +3,11 @@ module Client where
 import Prelude
 import API (api)
 import Credentials (Credentials, mkCredentials)
+import Data.Either (Either(..))
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
-import Effect.Aff (Aff)
+import Effect.Aff (Aff, attempt)
+import Effect.Exception (message)
 import Halogen as H
 import Halogen.Aff as HA
 import Halogen.HTML as HH
@@ -22,6 +24,7 @@ type State =
   , newTaskDescription :: String
   , tasks :: Array Task
   , busy :: Boolean
+  , error :: Maybe String
   }
 
 data Action
@@ -45,13 +48,14 @@ initialState = const
   , newTaskDescription: ""
   , tasks: []
   , busy: false
+  , error: Nothing
   }
 
 style :: forall i r. String -> HP.IProp (style ∷ String | r) i
 style = HP.attr (HC.AttrName "style")
 
 render :: State -> H.ComponentHTML Action () Aff
-render { username, password, newTaskDescription, tasks, busy } =
+render { username, password, newTaskDescription, tasks, busy, error } =
   let
     ready = not busy && username /= "" && password /= "" && newTaskDescription /= ""
   in
@@ -245,6 +249,11 @@ render { username, password, newTaskDescription, tasks, busy } =
                     ]
                     [ HH.text "Create Task" ]
                 ]
+              , HH.div
+                [ style "margin-top: 16px; color: red;" ] $
+                case error of
+                  Nothing -> []
+                  Just e -> [ HH.text e ]
               ]
           ]
     ]
@@ -262,8 +271,12 @@ handleAction :: forall o. Action -> H.HalogenM State Action () o Aff Unit
 handleAction = case _ of
   GetTasks -> do
     H.modify_ (_ { busy = true })
-    tasks <- H.liftAff $ clients.tasks.list."GET"
-    H.modify_ (_ { busy = false, tasks = tasks })
+    getRequest <- H.liftAff $ attempt clients.tasks.list."GET"
+    case getRequest of
+      Left error ->
+        H.modify_ (_ { busy = false, error = Just $ "Could not retrieve tasks: " <> message error })
+      Right tasks ->
+        H.modify_ (_ { busy = false, tasks = tasks })
   SetUsername username ->
     H.modify_ (_ { username = username })
   SetPassword password ->
@@ -273,10 +286,19 @@ handleAction = case _ of
   CreateTask -> do
     credentials <- mkCredentials <$> H.gets _.username <*> H.gets _.password
     description <- H.gets _.newTaskDescription
-    H.modify_ (_ { busy = true })
-    _ <- H.liftAff ((asClients api).tasks.newItem credentials { description })."POST"
-    tasks <- H.liftAff $ clients.tasks.list."GET"
-    H.modify_ (_ { busy = false, newTaskDescription = "", tasks = tasks })
+    H.modify_ (_ { busy = true, error = Nothing })
+    createRequest <- H.liftAff $ attempt ((asClients api).tasks.newItem credentials { description })."POST"
+    case createRequest of
+      Left error ->
+        H.modify_ (_ { busy = false, error = Just $ "Could not create task: " <> message error })
+      Right _ -> do
+        H.modify_ (_ { newTaskDescription = "" })
+        refreshRequest <- H.liftAff $ attempt clients.tasks.list."GET"
+        case refreshRequest of
+          Left error ->
+            H.modify_ (_ { busy = false, error = Just $ "Could not retrieve tasks: " <> message error })
+          Right tasks ->
+            H.modify_ (_ { busy = false, tasks = tasks })
     pure unit
 
 main :: Effect Unit
