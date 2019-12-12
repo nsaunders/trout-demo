@@ -284,7 +284,7 @@ handleAction = case _ of
     credentials <- mkCredentials <$> H.gets _.username <*> H.gets _.password
     description <- H.gets _.newTaskDescription
     H.modify_ (_ { busy = true, error = Nothing })
-    createRequest <- H.liftAff $ attempt ((asClients api).tasks.newItem credentials { description })."POST"
+    createRequest <- H.liftAff $ attempt (clients.tasks.newItem credentials { description })."POST"
     case createRequest of
       Left error ->
         H.modify_ (_ { busy = false, error = Just $ "Could not create task: " <> message error })
