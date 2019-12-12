@@ -95,18 +95,17 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                   , HP.placeholder "Username"
                   , HE.onValueInput (Just <<< SetUsername)
                   , HP.disabled busy
-                  , style """
+                  , style $ """
                       width: 120px;
                       height: 24px;
                       background: #fff;
-                      color: #333;
                       border: 0;
                       border-radius: 4px;
                       font-family: inherit;
                       font-size: inherit;
                       padding: 4px;
                       margin-left: 8px;
-                    """
+                    """ <> if busy then "color: #999;" else "color: #333;"
                   ]
               ]
           , HH.label
@@ -124,18 +123,17 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                   , HP.placeholder "Password"
                   , HE.onValueInput (Just <<< SetPassword)
                   , HP.disabled busy
-                  , style """
+                  , style $ """
                       width: 120px;
                       height: 24px;
                       background: #fff;
-                      color: #333;
                       border: 0;
                       border-radius: 4px;
                       font-family: inherit;
                       font-size: inherit;
                       padding: 4px;
                       margin-left: 8px;
-                    """
+                    """ <> if busy then "color: #999;" else "color: #333;"
                   ]
               ]
           ]
@@ -219,18 +217,17 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                       , HP.placeholder "e.g. Pick up the dry cleaning."
                       , HP.disabled busy
                       , HE.onValueInput (Just <<< SetNewTaskDescription)
-                      , style """
+                      , style $ """
                           width: 240px;
                           height: 24px;
                           background: #fff;
-                          color: #333;
                           border: 1px solid #ccc;
                           border-radius: 4px;
                           font-family: inherit;
                           font-size: inherit;
                           padding: 4px;
                           margin-top: 4px;
-                        """
+                        """ <> if busy then "color: #999;" else "color: #333;"
                       ]
                   ]
               , HH.div
