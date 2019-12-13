@@ -1,5 +1,5 @@
 { name =
-    "nodetrout-client-demo"
+    "trout-demo"
 , dependencies =
     [ "b64"
     , "console"
