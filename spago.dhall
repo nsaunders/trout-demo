@@ -5,6 +5,7 @@
     , "console"
     , "effect"
     , "halogen"
+    , "node-fs"
     , "node-http"
     , "nodetrout"
     , "psci-support"
