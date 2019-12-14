@@ -5,7 +5,9 @@
 
 Multiple options exist for building an HTTP server from a Trout specification. These are helpful because they allow request handlers to focus on domain logic rather than uninteresting protocol-level details. One such option is [`purescript-hypertrout`](https://github.com/purescript-hyper/purescript-hypertrout), originally by [Oskar Wickström](https://wickstrom.tech), who also designed Trout. The library used here, however, is [`purescript-nodetrout`](https://github.com/nsaunders/purescript-nodetrout).
 
-Similarly, on the client side, the [`purescript-trout-client`](https://github.com/purescript-hyper/purescript-trout-client) library can generate a convenient interface that hides the low-level details of building a HTTP request, e.g. constructing the URL from various parameters or serializing the request payload.
+Similarly, on the client side, the [`purescript-trout-client`](https://github.com/purescript-hyper/purescript-trout-client) library can generate a convenient interface that hides the low-level details of building an HTTP request, e.g. constructing the URL from various parameters or serializing the request payload.
+
+Using these tools, the [server](src/Server.purs) and [client](src/Client.purs) layers of this application are constructed according to the same [API specification](src/API.purs). Because the server and client are both written in PureScript, it is possible to share types and functions, as demonstrated in the [`Credentials`](src/Credentials.purs) and [`Task`](src/Task.purs) modules.
 
 Build client:
 ```
