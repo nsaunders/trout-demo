@@ -10,8 +10,8 @@ import Type.Trout.Method (Get, Post)
 type API =
   "tasks" := "api" :/ "tasks" :/ (
          "list" := Get (Array Task) JSON
-      :<|> "item" := Capture "id" Int :> Get Task JSON 
-      :<|> "newItem" := Header "Authorization" Credentials :> ReqBody TaskDetails JSON :> Post Task JSON
+    :<|> "item" := Capture "id" Int :> Get Task JSON 
+    :<|> "newItem" := Header "Authorization" Credentials :> ReqBody TaskDetails JSON :> Post Task JSON
   )
 
 api :: Proxy API
