@@ -7,7 +7,7 @@ Multiple options exist for building an HTTP server from a Trout specification. T
 
 Similarly, on the client side, the [`purescript-trout-client`](https://github.com/purescript-hyper/purescript-trout-client) library can generate a convenient interface that hides the low-level details of building an HTTP request, e.g. constructing the URL from various parameters or serializing the request payload.
 
-Using these tools, the [server](src/Server.purs) and [client](src/Client.purs) layers of this application are constructed according to the same [API specification](src/API.purs). Because the server and client are both written in PureScript, it is possible to share types and functions, as demonstrated in the [`Credentials`](src/Credentials.purs) and [`Task`](src/Task.purs) modules.
+Using these tools, the [server](src/Server.purs) and [client](src/Client.purs) layers of this application are constructed from the same [API specification](src/API.purs). Because the server and client are both written in PureScript, sharing types and even functions is effortless. The [`Credentials`](src/Credentials.purs) and [`Task`](src/Task.purs) modules, for example, are used both server- and client-side.
 
 Build client:
 ```
