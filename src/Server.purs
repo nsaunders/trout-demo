@@ -12,6 +12,7 @@ import Data.String.CodePoints (take) as String
 import Effect (Effect)
 import Effect.Aff (Aff)
 import Effect.Class (liftEffect)
+import Effect.Console (log)
 import Effect.Exception (message)
 import Effect.Ref (modify, modify_, new, read) as Ref
 import Node.Encoding (Encoding(UTF8))
@@ -76,9 +77,10 @@ serveStatic req res =
 
 main :: Effect Unit
 main = do
+  let port = 3000
   handlers <- mkHandlers
   server <- createServer \req ->
               if String.take 4 (requestURL req) == "/api"
                 then serve' api handlers (const $ pure unit) req
                 else serveStatic req
-  listen server { hostname: "0.0.0.0", port: 3000, backlog: Nothing } $ pure unit
+  listen server { hostname: "0.0.0.0", port, backlog: Nothing } $ log ("Listening on port " <> show port <> "...")
