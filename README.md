@@ -9,12 +9,10 @@ Similarly, on the client side, the [`purescript-trout-client`](https://github.co
 
 Using these tools, the [server](src/Server.purs) and [client](src/Client.purs) layers of this application are constructed from the same [API specification](src/API.purs). Because the server and client are both written in PureScript, sharing types and even functions is effortless. The [`Credentials`](src/Credentials.purs) and [`Task`](src/Task.purs) modules, for example, are used both server-side and client-side.
 
-Build client:
-```
-spago bundle-app --to static/app.js --main Client
-```
+### Building and running the app
 
-Run server:
+Using [Spago](https://github.com/spacchetti/spago):
+
 ```
-spago run --main Server
+spago bundle-app --to static/app.js --main Client && spago run --main Server
 ```
