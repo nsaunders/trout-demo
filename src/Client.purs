@@ -102,7 +102,7 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                       border: 0;
                       border-radius: 4px;
                       font-family: inherit;
-                      font-size: inherit;
+                      font-size: 14px;
                       padding: 4px;
                       margin-left: 8px;
                     """ <> if busy then "color: #999;" else "color: #333;"
@@ -130,7 +130,7 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                       border: 0;
                       border-radius: 4px;
                       font-family: inherit;
-                      font-size: inherit;
+                      font-size: 14px;
                       padding: 4px;
                       margin-left: 8px;
                     """ <> if busy then "color: #999;" else "color: #333;"
@@ -224,7 +224,7 @@ render { username, password, newTaskDescription, tasks, busy, error } =
                           border: 1px solid #ccc;
                           border-radius: 4px;
                           font-family: inherit;
-                          font-size: inherit;
+                          font-size: 14px;
                           padding: 4px;
                           margin-top: 4px;
                         """ <> if busy then "color: #999;" else "color: #333;"
